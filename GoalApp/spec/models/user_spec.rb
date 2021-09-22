@@ -18,11 +18,20 @@ RSpec.describe User, type: :model do
 
   describe "class methods" do
     describe "::find_by_credentials" do
-      context "given a username and password" do
-        it "should return the user with those credentials"
+
+      context "with a valid username and password" do
+        it "should return the user with those credentials" do
+          suz = User.create(username: 'totodile', password: 'totodile')
+          user = User.find_by_credentials('totodile', 'totodile')
+          expect(suz.password_digest).to eq(user.password_digest)
+        end
       end
-      context "if a user does not exist, or if there is no password entered" do
-        it "should not be found in the database"
+      context "with an invalid username and password" do
+        it "should return nil" do
+          suz = User.create(username: 'totodile', password: 'totodile')
+          user = User.find_by_credentials('totodile', 'beefpork')
+          expect(user).to be_nil
+        end
       end
     end
   end
